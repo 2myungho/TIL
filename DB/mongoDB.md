@@ -190,6 +190,18 @@
 * ### quiry 예제 직접 풀이
 
   * collection 은 zips_db
+  * $group, $metch, $project, $limit 사용
+    * **$group**: 
+      1. 그룹에 대한 _id를 지정해주어야 한다. 
+      2. 특정 필드에 대한 집계 연산을 가능하게 해준다.
+    * **$metch**: 
+      1. sql 조건의만족하는 document만 필터링해서 출력한다.
+      2. sql의 where, having과 유사하다.
+      3. metch를 group 앞에 쓰면 where로 사용할 수 있고, 뒤에 쓰면 having으로 쓸 수 있다.
+    * **project**: 
+      1. _id에 그룹핑 된 특정 필드를 부분적으로 출력할 수 있다. 
+    * **limit** :
+      1. 원하는 만큼의 데이터 수만 출력할 수 있다.
 
   1. SQL: SELECT COUNT(*) AS count FROM zip
 
