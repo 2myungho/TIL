@@ -10,6 +10,8 @@
 
 ### JDBC 설치 방법
 
+* #### 오라클을 JDBC에 최신파일을 업로드 하지 않기 때문에 오라클 공식 홈페이지에서 로그인하고 다운받아야 한다...
+
 * #### JDBC  jar파일을 다운받는다 --> src의 build path -> config build path -> Libraries 탭 -> Classpath에 있는 파일 선택 후 Add JAR 클릭 --> Apply 
 
 ### JDBC 절차
@@ -90,7 +92,32 @@ stmt.setString(4, user.getUserid());
 
 ## MongoDB
 
+### Mongo Java 
+
+1. **메뉴의 File -> New -> project에서 Maven Project를 선택한다.**
+
+2. **프로젝트 저장위치는 기본값을 사용한다 (default)**
+
+3. **메이븐 템플릿 중 maven-archetype-archertype (첫번째)를 선택하고 next**
+
+4. **Gruop id는 보통 도메인을 사용, Artifact Id는 프로젝트명을 사용**
+
+5. **생성후 pom.xml 파일에 메이븐 라이브러리 복사**
+
+   ```xml
+   <dependencies>
+   		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+   		<dependency>
+   			<groupId>org.mongodb</groupId>
+   			<artifactId>mongo-java-driver</artifactId>
+   			<version>3.12.7</version>
+   		</dependency>
+   </dependencies>
+   ```
+
 ### MongoDB 절차
+
+1. 
 
 ```java
 //localhost와 port번호를 받아온다.
@@ -98,7 +125,7 @@ MongoClient mongoClient = new MongoClient("localhost",27017);
 //해당 테이블을 받아온다.
 MongoDatabase database = mongoClient.getDatabase("java_db");
 
-//createCollection는 컬렉션(테이블)을 바로 만들어주는 메소드
+//createCollection는 컬렉션(테이블)을 바로 만들어주는 메소드이고 이미 있는 컬렉션일 경우 에러가 난다.
 database.createCollection("java_col");
 //getCollection은 컬렉션이 없으면 만들어주고 있으면 가져와 줌, 내용을 추가해주어야 함
 MongoCollection<Document> collection = database.getCollection("java_col");
