@@ -57,3 +57,25 @@
   queue.offer(queue.poll()); // 맨 앞에 있는 데이터를 맨 뒤로 돌릴 수 있다.
   queue.get(i); //인덱스 i에 대한 값을 출력한다.
   ```
+
+**9/8**
+
+**회전하는 큐** #1021
+
+* ```java
+  //Depue는 stack과 Queue 둘의 메소드를 사용할 수 있다.
+  Deque // 큐의 양쪽 끌에서 삽입과 삭제가 모두 발생할 수 있는 큐
+  Deque<Integer> qu = new LinkedList<Integer>(); //선언
+  Deque.offer(Deue.poll()); // 맨 앞에 있는 데이터를 맨 뒤로 돌릴 수 있다.
+  Deque.addFirst(Deue.pollLast()); // 맨 뒤에 있는 데이터를 맨 앞으로 돌릴 수 있다.
+  
+  //Queue를 사용했을 때 원하는 값의 인덱스를 가져오려면
+  if (o != qu.peek()) {
+  	for (Integer s : qu) {
+  		cnt ++;
+  		if(s == o) {
+  			//ex) o의 입력 값이 5일 경우 cnt = 5
+  		}			
+  	}
+  ```
+
