@@ -76,6 +76,43 @@
   * **SqlSessionFactoryBean을 Bean 등록**할 때 **DataSource 정보**와 **MyBatis Config 파일 정보**, **Mapping 파일 정보**를 함께 설정한다. (위치 정보)
   * SqlSession Template를 Bean으로 등록한다.
 
+### Spring Bean 설정 파일 (DataSource)
+
+* springBean.xml 에서 DataSource bean등록
+
+* ```xml
+  <!-- BasicDataSource Bean으로 등록 -->
+  	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" >
+  		<property name="driverClassName" value="${db.driverClass}"/>
+  		<property name="url" value="${db.url}"/>
+  		<property name="username" value="${db.username}"/>
+  		<property name="password" value="${db.password}" />
+  	</bean>
+  ```
+
+* @Test에서  Connection으로 DataSource불러오기
+
+  ```java
+  @Autowired
+  	// BasicDataSource는 DataSource 인터페이스를 상속받는다.
+  	DataSource dataSource;
+  @Test
+  public void con() {
+  		try {
+  			Connection connection = dataSource.getConnection();
+  			System.out.println(connection);
+  		} catch (SQLException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
+  		System.out.println(factory.getClass().getName());
+  	}
+  ```
+
+  
+
+
+
 ### Mapping 파일 (SQL문 포함)
 
 * ```XML
