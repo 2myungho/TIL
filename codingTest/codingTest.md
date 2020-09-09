@@ -79,3 +79,14 @@
   	}
   ```
 
+**9/9**
+
+**스택** #10828
+
+* ```java
+  //subString을 사용하여 입력 값에 대해 유동적인 조건을 줄 수 있었다.
+  str = a.substring(5);
+  	if(a.equals("push "+str)) {
+  		sc.push(Integer.parseInt(str));
+  	}
+  ```
