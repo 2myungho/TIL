@@ -90,3 +90,37 @@
   		sc.push(Integer.parseInt(str));
   	}
   ```
+
+**9/10**
+
+**집합의 표현**#1717 (혼자 풀기 실패)
+
+* 백준 골드 난이도에 처음 도전했다가 실패를 경험했다.
+* 메소드를 만들어서 풀이하는 방법을 경험해 보았다.
+* 문제 내용을 이해하는데에도 상당한 시간이 소비되었다.
+
+* ```java
+  //배열 데이터 채우기
+  public static void makeSet(int n){
+          parent = new int[n + 1];
+          for(int i = 0; i <= n; i++){
+              parent[i] = i;
+          }
+      }
+  //합집합 구현
+  public static void merge(int a, int b) {
+  	a = find(a);
+  	b = find(b);
+  	if (a == b) {
+  		return;
+  	}
+  	parent[a] = b;
+  }
+  // 합병	
+  public static int find(int a) {
+  	if (a == parent[a]) {
+  		return a;
+  	}
+  	return parent[a] = find(parent[a]);
+  }
+  ```
