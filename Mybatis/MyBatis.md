@@ -189,3 +189,71 @@ System.out.println(user);
 * **DTO 정의** (Data Transfer Object)
   * 계층간 데이토 교환을 위한 자바 빈즈
   * 값만 들고 있다.
+
+
+
+Oracle JDBC Driver  설절
+
+DataSource (javax.sql 패키지) 인터페이스 사용
+
+- SimpleDriverDataSource (spring-jdbc 포함, 개발용) 권장하지 않음
+- BasicDataSource (Connection pooling 방식으로 구현, Apache Commons DBCP) 권장
+
+MyBatis
+
+- SqlSessionFactory 
+  - SqlSession 생성하는 Factory
+- SqlSession
+  - Mapper에 있는 SQL문 실행
+  - insert() / update / delete / selecOne / 등등
+- 설정 파일 : SqlMapConfig.xml 
+  - Mybatis 설정파일, DataSource 설정, Mapper 설정파일 정보, VO클래스 정보, UserMapper.xml, StudentMapper.xml
+
+MyBatis-Spring (MyBatis와 Spring 연동)
+
+* SqlSessionFactoryBean
+  * DataSource Bean의 Ref, SqlMapConfig.xml 파일정보, Mapper 파일 정보 (*Mapper.xml)
+* SqlSessionTemplate 
+  * SqlSession 인터페이스 구현 constructor injection으로 SqlSessionFactory의 ref를 주입 받음
+
+Mapper
+
+* UserMapper.xml
+  * resultType = "UserVO" 컬럼명과 VO객체의 getter / setter 메서드명이 동일한 경우
+* StudentMapper.xml 
+  * resultMap = "studentResultMap" 컬럼명과 VO객체의 getter / setter 메서드명이 일치 하지 않기 때문에 컬럼명과 property를 각각 매핑해줘야 한다.
+  * 테이블간의 관계수
+    * 1 : 1 매핑 <association>
+    * 1 : N 매핑 <collection>
+
+UserMapper가 SqlSession을 상속받는 설정을 해야한다.
+
+
+
+
+
+이클립스에서 DB 확인하는 법
+
+* 플러그인 https://download.eclipse.org/releases/neon/
+*  **data source Explorer**
+
+show view orther -->data Management --> **data source Explorer** 선택 --> new --> Oracle 선택 ---> orcle11,  jar파일 선택, properties에서 URL :  jdbc:oracle:thin:@localhost:1521:xe, db name : ex 
+
+
+
+
+
+Get / Post
+
+: Client에서 server로 페이지를 보내는 방식
+
+Get
+
+* url에 key = value 출력
+* 요청 데이터를 url에 Apped 해서 보냄
+* 카드번호 주민번호 등은 get방식에 적합하지 않음
+
+post
+
+* 데이터 암호화해서 보낸다
+

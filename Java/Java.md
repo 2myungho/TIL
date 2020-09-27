@@ -264,3 +264,46 @@
     * **peek() : 객체 하나를 가져온다. 객체를 큐에서 제거하지 않는다.**
     * **poll() : 객체 하나를 가져온다. 객체를 큐에서 제거한다.**
 
+
+
+### 람다식
+
+* 자바스크립트의 화살표함수와 비슷하다.
+* 함수형 인터페이스를 람다식으로 이용할 수 있다.
+* 람다식을 사용하기 위해서 함수형 인터페이스는 추상메소드가 한 개만 있어야만 한다.
+  * 하나만 매칭이 되여야 하기 때문이다.
+
+```java
+public class LambdaTest {
+	public static void main(String[] args) {
+		List<String> asList = Arrays.asList("자바","람다","부트");
+		//1단계 : MyConsumer 클래스 생성 전달
+		asList.forEach(new MyConumer());
+		
+		//2단계 : Consumer를 anonymous inner class로 생성해서 accept 메서드를 오버라이딩하기
+		asList.forEach(new Consumer<String>() {
+
+			@Override
+			public void accept(String t) {
+				System.out.println(t);
+			}
+		});
+		System.out.println("람다식으로 메서드 오버라이딩");
+		//3단계 : Consumer의 accept() 메서드 오버라이딩을 람다식으로 사용하기
+		asList.forEach(value -> System.out.println(value));
+		
+		//4단계 : Consumer의 accept() 메서드 오버라이딩을 Method Reference로 사용하기
+		System.out.println("Method Reference");
+		asList.forEach(System.out::println);
+	}
+}
+class MyConumer implements Consumer<String>{
+
+	@Override
+	public void accept(String t) {
+		System.out.println(t);
+	}
+	
+}
+```
+
