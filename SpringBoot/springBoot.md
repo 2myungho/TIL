@@ -12,7 +12,13 @@
 
 ### 3). 서버가 제대로 실행 되는지 확인한다
 
-* 만약 기본 8080 포트 번호가 오류 난다면 application.properties 에서 포트 번호를 따로 정해준다.
+* 만약 기본 8080 포트 번호가 오류 난다면 application.yml 에서 포트 번호를 따로 정해준다.
+
+```yml
+server:
+  port: 8086
+```
+
 * resources 폴더에 있는 데이터를 수정했을 때는 서버를 재시작 해주어야 한다.
 * **spring-boot-devtools 라이브러리를 사용하면 서버 재시작을 하지 않아도 된다.**
 
@@ -33,6 +39,158 @@ localhost:8082로 변경해준다
 
 * 왼쪽 상단 연결 끊기로 로그인 창으로 돌아와서 이후부터는 **jdbc:h2:tcp://localhost/~/jpashop** 이 주소로 접속한다.
 
+### 5). application.yml 설정
+
+application.yml
+
+```yml
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jpashop
+    username: sa
+    driver-class-name: org.h2.Driver #데이터 베이스 설정이 완료 됨
+   
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+      
+logging:
+  level:
+   org.hibernate.SQL: debug
+```
+
+
+
+### 6). Entity 클래스 생성
+
+```java
+@Entity
+@Getter @Setter
+public class Member {
+	
+	@Id @GeneratedValue
+	private Long id;
+	private String username;
+}
+```
+
+### 7).  Repository 생성
+
+```java
+//레포지토리는 엔티티를 찾아주는 것 ex)DAO랑 비슷함
+@Repository
+public class MemberRepository {
+	
+	@PersistenceContext //영속성
+	private EntityManager em;
+	
+	public Long save(Member member) {
+		em.persist(member); //em.persist (Entity를 영속성 컨텍스트에 저장하는 것)
+		return member.getId();
+	}
+	
+	public Member find(Long id) {
+		return em.find(Member.class,id); //DB보다 먼저 1차 캐시를 조회한다. 1차 캐시에 해당 Entity가 존재하면 바로 반환한다.
+	}
+}
+```
+
+### 8). JUnit Test
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class MemberRepositoryTest {
+	
+	@Autowired MemberRepository memberRepository;
+
+	@Test
+	@Transactional
+	@Rollback(false)
+	public void test() {
+		//given
+		Member member = new Member();
+		member.setUsername("memberA");
+		
+		//when
+		Long saveId = memberRepository.save(member);
+		Member findMember = memberRepository.find(saveId);
+		
+		//then 두 객체를 비교
+		Assertions.assertThat(findMember.getId()).isEqualTo(member.getId());
+		Assertions.assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+	}
+}
+```
+
+### 쿼리 파라미터 로그 남기기
+
+* JUnit  실행시 value에 ??로 출력 된다.
+
+```
+insert 
+    into
+        member
+        (username, id) 
+    values
+        (?, ?)
+```
+
+* Application.yml 라이브러리 추가
+
+```yml
+logging:
+  level:
+   org.hibernate.SQL: debug
+   org.hibernate.type: trace #추가
+```
+
+* 로그를 출력해준다.
+
+```
+2020-10-02 02:05:21.356 TRACE 178324 --- [main] o.h.type.descriptor.sql.BasicBinder:binding parameter [1] as [VARCHAR] - [memberA]
+2020-10-02 02:05:21.356 TRACE 178324 --- [main] o.h.type.descriptor.sql.BasicBinder:binding parameter [2] as [BIGINT] - [1]
+```
+
+* ??가 보이게 하고 싶으면 외부라이브러리 사용
+* https://github.com/gavlyukovskiy/spring-boot-data-source-decorator
+* build.gradle dependencies 추가
+
+```groovy
+implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.1'
+```
+
+* 출력문
+
+```
+insert into member (username, id) values (?, ?)
+insert into member (username, id) values ('memberA', 1);
+```
+
+
+
+
+
+### jar 빌드해서 동작 확인하는 법
+
+```
+cd C:\java\springBootZip\jpashop
+
+./gradlew clean build //빌드 초기화
+
+cd build
+cd libs
+ls
+(jpashop-0.0.1-SNAPSHOT.jar jar 파일이 보인다.)
+java -jar jpashop-0.0.1-SNAPSHOT.jar //localhost로 접속 가능
+```
+
+
+
 
 
 | 라이브러리           | 내용                                                         |
@@ -45,7 +203,32 @@ localhost:8082로 변경해준다
 
 
 
-| 어노테이션 | 내용                                                         |
-| ---------- | ------------------------------------------------------------ |
-| Model      | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
+## Spring Boot 어노테이션 및 용어
 
+| 어노테이션 & 용어 | 내용                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| Model             | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
+| @Transactional    | @Test 에서 사용할 때 실행후 DB를 롤백 @Rollback(false)를 사용하면 비활성화 가능 |
+|                   |                                                              |
+|                   |                                                              |
+|                   |                                                              |
+|                   |                                                              |
+|                   |                                                              |
+|                   |                                                              |
+|                   |                                                              |
+
+
+
+## JPA 어노테이션
+
+| 어노테이션          | 내용                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| @Entity             | 테이블과 링크될 클래스임을 나타낸다.                         |
+| @Id                 | 해당 테이블의 PK 필드를 나타냅니다.                          |
+| @GeneratedValue     | PK의 생성 규칙을 나타냅니다. `@Id @GeneratedValue`           |
+| @Column             | 테이블의 컬럼을 나타내며 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됩니다.<br />사용하는 이유는, 기본 값 외에 추가로 변경이 필요한 옵션이 있으면 사용합니다.<br />ex) VARCHAR(255)가 기본값인데, 사이즈를 500으로 늘리고 싶다. |
+| @PersistenceContext | Entity를 영구 저장하는 환경이라는 뜻 (영속성 컨텍스트)<br />**EntityManager**를 통해서 영속성 컨텍스트에 접근한다.<br />Spring Boot에서 팩토리와 같은 설정을 자동으로 해준다. |
+|                     |                                                              |
+|                     |                                                              |
+|                     |                                                              |
+|                     |                                                              |
