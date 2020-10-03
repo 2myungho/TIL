@@ -2,6 +2,34 @@
 
 
 
+### 어플리케이션 아키텍쳐
+
+![어플리케이션 아키텍처](C:\Users\SAMSUNG\LMH\TIL\SpringBoot\image\어플리케이션 아키텍처.png)
+
+
+
+#### 계층형 구조 사용
+
+* Controller, web: 웹 계층
+* sevice : 비즈니스 로직, 트랜젝션 처리
+* repository : JPA를 직접 사용하는 계층, 엔티티 매니저 사용
+* domain : 엔티티가 모여 있는 계층, 모든 계층에서 사용
+
+#### 패키지 구조
+
+* jpabook.jpashop
+  * domain
+  * exception
+  * repository
+  * service
+  * web
+
+#### 개발 순서 
+
+* 서비스, 레포지토리 계층을 개발하고, 테스트 케이스를 작성해서 검증, 마지막에 웹 계층 적용
+
+
+
 ## 환경설정
 
 ### 1). https://start.spring.io/ 에서 Gradle 프로젝트로 시작한다.
@@ -205,36 +233,33 @@ java -jar jpashop-0.0.1-SNAPSHOT.jar //localhost로 접속 가능
 
 ## Spring Boot 어노테이션 및 용어
 
-| 어노테이션 & 용어 | 내용                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| Model             | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
-| @Transactional    | @Test 에서 사용할 때 실행후 DB를 롤백 @Rollback(false)를 사용하면 비활성화 가능 |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
-|                   |                                                              |
+| 어노테이션 & 용어        | 내용                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| Model                    | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
+| @Transactional           | @Test 에서 사용할 때 실행후 DB를 롤백 @Rollback(false)를 사용하면 비활성화 가능 |
+| @RequiredArgsConstructor | lombok의 어노테이션이다. final이 있는 필드에 생성자 inject를 자동으로 생성해준다. |
+|                          |                                                              |
+|                          |                                                              |
+|                          |                                                              |
+|                          |                                                              |
+|                          |                                                              |
+|                          |                                                              |
 
 
 
 ## JPA 어노테이션
 
-| 어노테이션              | 내용                                                         |
-| ----------------------- | ------------------------------------------------------------ |
-| @Entity                 | 테이블과 링크될 클래스임을 나타낸다.                         |
-| @Id                     | 해당 테이블의 PK 필드를 나타냅니다.                          |
-| @GeneratedValue         | PK의 생성 규칙을 나타냅니다. `@Id @GeneratedValue`           |
-| @Column                 | 테이블의 컬럼을 나타내며 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됩니다.<br />사용하는 이유는, 기본 값 외에 추가로 변경이 필요한 옵션이 있으면 사용합니다.<br />ex) VARCHAR(255)가 기본값인데, 사이즈를 500으로 늘리고 싶다. |
-| @PersistenceContext     | Entity를 영구 저장하는 환경이라는 뜻 (영속성 컨텍스트)<br />**EntityManager**를 통해서 영속성 컨텍스트에 접근한다.<br />Spring Boot에서 팩토리와 같은 설정을 자동으로 해준다. |
-| @Table                  | 엔티티와 매핑할 테이블을 지정하고, 생략시 매핑한 엔티티 이름을 테이블 이름으로 사용한다. |
-| @Embeddable / @Embedded | jpa Entity 안의 Column을 하나의 객체로써 사용하고 싶을 때 사용 |
-| @JoinColumn             | @JoinColumn(name = "member_id")  mapping을 무엇으로 할 것인가. |
-| @Inheritance            | 상속관계매핑이다. 부모클래스에 설정해준다.<br />단일테이블 전략 (테이블 하나만 사용하는 전략) @Inheritance(strategy = InheritanceType.JOINED) |
-
 | 어노테이션                         | 내용                                                         |
 | ---------------------------------- | ------------------------------------------------------------ |
+| @Entity                            | 테이블과 링크될 클래스임을 나타낸다.                         |
+| @Id                                | 해당 테이블의 PK 필드를 나타냅니다.                          |
+| @GeneratedValue                    | PK의 생성 규칙을 나타냅니다. `@Id @GeneratedValue`           |
+| @Column                            | 테이블의 컬럼을 나타내며 굳이 선언하지 않더라도 해당 클래스의 필드는 모두 컬럼이 됩니다.<br />사용하는 이유는, 기본 값 외에 추가로 변경이 필요한 옵션이 있으면 사용합니다.<br />ex) VARCHAR(255)가 기본값인데, 사이즈를 500으로 늘리고 싶다. |
+| @PersistenceContext                | Entity를 영구 저장하는 환경이라는 뜻 (영속성 컨텍스트)<br />**EntityManager**를 통해서 영속성 컨텍스트에 접근한다.<br />Spring Boot에서 팩토리와 같은 설정을 자동으로 해준다. |
+| @Table                             | 엔티티와 매핑할 테이블을 지정하고, 생략시 매핑한 엔티티 이름을 테이블 이름으로 사용한다. |
+| @Embeddable / @Embedded            | jpa Entity 안의 Column을 하나의 객체로써 사용하고 싶을 때 사용 |
+| @JoinColumn                        | @JoinColumn(name = "member_id")  mapping을 무엇으로 할 것인가. |
+| @Inheritance                       | 상속관계매핑이다. 부모클래스에 설정해준다.<br />@Inheritance(strategy = InheritanceType.JOINED) Movie ,Album , Book 테이블이 Item의 PK를 외래키로 갖는 방식<br />@Inheritance(strategy = InheritanceType.SINGLE_TABLE) : 하나의 테이블로 처리<br />@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) |
 | @DiscriminatorColumn(name="DTYPE") | 상속관계매핑이다. 부모클래스에 설정해준다<br />하위클래스를 구분하는 용도의 컬럼이다. |
 | @DiscriminatorValue("XXX")         | 상속관계매핑이다. 하위클래스에 설정해준다<br />어노테이션을 선언하지 않은 경우 기본값으로 클래스 이름이 들어간다. |
 | @Enumerated                        | 자바 enum 타입 (열거타입)을 엔티티 클래스의 속성으로 사용할 수 있다.<br />EnumType.ORDINAL : enum 순서 값을 DB에 저장<br />EnumType.STRING : enum 이름을 DB에 저장 |
