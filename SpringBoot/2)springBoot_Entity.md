@@ -113,7 +113,18 @@ public class Address {
   	}
   ```
 
+
+* cascade = CascadeType.ALL
+
+  ```java
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  	//mappedBy는 orderItem 테이블에 있는 order 필드에 의해서 맵핑 되었다를 의미.
+  	//cascade = CascadeType.ALL을 설정하면 order을 persist할 때 orderItem도 persist를 강제로 날려준다.
+  ```
+
   
+
+
 
 
 

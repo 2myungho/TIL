@@ -276,6 +276,300 @@ public class ItemRepository {
 
 ```
 
+* ItemService
+
+```java
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class ItemService {
+
+	private final ItemRepository itemRepository;
+	
+	@Transactional(readOnly = false)
+	public void saveItem(Item item) {
+		itemRepository.save(item);
+	}
+	
+	//조회
+	public List<Item> findItme(){
+		return itemRepository.findAll();
+	}
+	
+	public Item findOne(Long itemId) {
+		return itemRepository.findOne(itemId);
+	}
+}
+```
+
+
+
+## 주문 도메인 개발
+
+* 상품 주문
+* 주문 내역 조회
+* 주문 최소
+
+
+
+* **생성 메서드 사용**
+  * 객체를 생성하는  방법
+    * 단순히 new를 사용해서 생성하는 방법
+    * 생성 메서드를 사용하는 방법
+    * 빌더를 사용하는 방법
+    * 별도의 생성 클래스를 사용하는 방법 등등
+  * 단순히 new를 사용하는 방법보다는 생성 메서드를 사용하는 것이 메서드 이름을 통해 생성 의도를 나타낼 수 있기 때문에 좋다고 판단한다.
+
+* Order
+
+  * **가변인자** : 매개변수의 개수가 상황에 따라 가변적인 경우가 발생할 수 있다.
+
+  * ```java
+    //에를 들어 이런식으로 계속 늘어난다면...
+    String divide(String s1, String s2){...}
+    String divide(String s1, String s2, String s3){...}
+    String divide(String s1, String s2, String s3, String s4){...}
+    String divide(String s1, String s2, String s3, String s4, String s5){...}
+    ```
+
+  * 이에 대한 대책으로 가변 매개변수를 통해 처리할 수 있다.
+
+  * 가변인자는 마지막에 작성 해야한다.
+
+  * 가변인자는 내부적으로 배열을 생성한다 (forEach 사용가능)
+
+```java
+@Entity
+@Table(name = "orders") //엔티티와 매핑할 테이블을 지정하고, 생략시 매핑한 엔티티 이름을 테이블 이름으로 사용한다.
+@Getter @Setter
+public class Order {
+	
+	@Id @GeneratedValue
+	@Column(name = "order_id")
+	private Long id;
+	
+	@ManyToOne(fetch = FetchType.LAZY) //여러개의 상품을 하나의 회원이 주문 
+	@JoinColumn(name = "member_id") 
+	//mapping을 무엇으로 할 것인가. //이곳에 값을 넣으면 pk 값이 다른 멤버로 변경
+	private Member member;
+	
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	//mappedBy는 orderItem 테이블에 있는 order 필드에 의해서 맵핑 되었다를 의미.
+    //cascade = CascadeType.ALL을 설정하면 order을 persist할 때 orderItem도 persist를 강제로 날려준다.
+	private List<OrderItem> orderItems = new ArrayList<>();
+	
+	/*
+	 * persist(orderItemA)
+	 * persist(orderItemB)
+	 * persist(orderItemC)
+	 * cascade = CascadeType.ALL를 해주게 되면
+	 * 
+	 * persist(order)만 해주면 된다.
+	 * 
+	 * */
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="delivery_id")
+	private Delivery delivery;
+	
+	private LocalDateTime orderDate; //하이버네이트가 Date 자동 지원
+	
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status; //주문상태 [ORDER, CANCEL]
+	
+	//==연관관계 편의 메서드 ==// //양방향 관계일 때 사용
+	public void setMember(Member member) {
+		this.member = member;
+		member.getOrders().add(this);
+	}
+	
+	public void addOrderItem(OrderItem orderItem) { //자식일 때 add
+		orderItems.add(orderItem);
+		orderItem.setOrder(this);
+	}
+	
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
+		delivery.setOrder(this);
+	}
+	
+	//== 생성 메서드 ==// // Order에는 여러 연관 간계가 있어서 복잡함 그걸 생성 메서드로 처리
+	//앞으로 생성하는 시점에 변경사항이 생길 경우 생성메서드만 변경하면 된다.
+	public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) { 
+		//OrderItem...은 가변 인자이다. 가변인자는 내부적으로 배열을 생성해서 사용한다. 매개변수가 사용자 쓰임에 따라 무한이 늘어날 수도 있기 때문에 사용
+		Order order = new Order();
+		order.setMember(member);
+		order.setDelivery(delivery);
+		for (OrderItem orderItem : orderItems) {
+			order.addOrderItem(orderItem);
+		}
+		order.setStatus(OrderStatus.ORDER); //OrderStatus의 처음 상태를 order로 강제한다 //상태
+		order.setOrderDate(LocalDateTime.now()); // 현재시간 //주문시간
+		return order;
+	}
+	
+	//== 비즈니스 로직 ==//
+	//주문 취소 (배송이 이미 시작했을 때 취소가 불가능 하다는 내용 포함)
+	 public void cancel() {
+		 if(delivery.getStatus() == DeliveryStatus.COMP) {
+			 throw new IllegalStateException("이미 배송완료 된 상품은 취소가 불가능합니다. ");
+		 }
+		 this.setStatus(OrderStatus.CANCEL);
+		 for (OrderItem orderItem : orderItems) {
+			orderItem.cancel(); // 한 번 주문할 때 고객이 상품을 두개 주문할 수도 있으니까.
+		}
+	 }
+	 
+	 //== 조회 로직 ==//
+	 //전체 주문 가격 조회
+	 public int getTotalPrice() {
+		 //내가 주문한 전체 가격은 현재 나한테 정보가 없다. orderItem을 다 더하면 된다.
+		//totalPrice를 0으로 초기화 하고, orderItems 루프를 돌면서 orderItem.getTotalPrice()를 가지고 온다.
+		 int totalPrice = 0;
+		 for (OrderItem orderItem : orderItems) {
+			 totalPrice += orderItem.getTotalPrice(); 
+		 }
+		 //스레드 사용
+//		 return orderItems.stream()
+//				 .mapToInt(OrderItem::getTotalPrice) //type :: getTotalPrice 메서드 실행
+//				 .sum();
+		 return totalPrice;
+	 }
+```
+
+* OrderRepository
+  * **검색기능 (동적 쿼리)**
+  * status나 name이 없으면 모든 데이터를 조회하게 한다.
+
+```java
+//검색기능 //name, status가 있을 때
+	public List<Order> findAll(OrderSearch orderSearch){
+		return em.createQuery("select o from Order o join o.member m" +
+					"where o.status = :status " +
+					"and m.name like :name", Order.class) //order와 연관된 member와 join하라
+				.setParameter("status", orderSearch.getOrderStatus())
+				.setParameter("name", orderSearch.getMemberName())
+				.setMaxResults(1000) //최대 1000건 조회
+				.getResultList();
+	}
+	
+	///==동적 쿼리 ==/
+//1번 방법 JPQL로 처리
+public List<Order> findAllByString(OrderSearch orderSearch) {
+		// language=JPAQL
+		String jpql = "select o From Order o join o.member m";
+		boolean isFirstCondition = true;
+		// 주문 상태 검색
+		if (orderSearch.getOrderStatus() != null) {
+			if (isFirstCondition) {
+				jpql += " where";
+				isFirstCondition = false;
+			} else {
+				jpql += " and";
+			}
+			jpql += " o.status = :status";
+		}
+		// 회원 이름 검색
+		if (StringUtils.hasText(orderSearch.getMemberName())) {
+			if (isFirstCondition) {
+				jpql += " where";
+				isFirstCondition = false;
+			} else {
+				jpql += " and";
+			}
+			jpql += " m.name like :name";
+		}
+		TypedQuery<Order> query = em.createQuery(jpql, Order.class).setMaxResults(1000); // 최대 1000건
+		if (orderSearch.getOrderStatus() != null) {
+			query = query.setParameter("status", orderSearch.getOrderStatus());
+		}
+		if (StringUtils.hasText(orderSearch.getMemberName())) {
+			query = query.setParameter("name", orderSearch.getMemberName());
+		}
+		return query.getResultList();
+	}
+
+//2번 방법 Criteria로 처리 , JPA가 동적쿼리를 처리할 수 있게 도와줌
+public List<Order> findAllByCriteria(OrderSearch orderSearch) {
+ CriteriaBuilder cb = em.getCriteriaBuilder();
+ CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+ Root<Order> o = cq.from(Order.class);
+ Join<Order, Member> m = o.join("member", JoinType.INNER); //회원과 조인
+ List<Predicate> criteria = new ArrayList<>();
+    
+ //주문 상태 검색
+ if (orderSearch.getOrderStatus() != null) {
+ 	Predicate status = cb.equal(o.get("status"),
+	orderSearch.getOrderStatus());
+ 	criteria.add(status);
+ }
+    
+ //회원 이름 검색
+ if (StringUtils.hasText(orderSearch.getMemberName())) {
+ 	Predicate name =
+ 	cb.like(m.<String>get("name"), "%" +
+	orderSearch.getMemberName() + "%");
+ 	criteria.add(name); 
+ }
+ cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
+ TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
+ return query.getResultList();
+}
+
+//3번 방법 Querydsl로 처리 (권장 방법)
+```
+
+```java
+@Repository
+@RequiredArgsConstructor
+public class OrderRepository {
+
+	private final EntityManager em;
+
+	public void save(Order order) {
+		em.persist(order);
+	}
+
+	// 상품조회
+	public Order findOne(Long id) {
+		return em.find(Order.class, id);
+	}
+
+	// 검색기능 (동적쿼리) //status나 name이 없으면 모든 데이터를 조회하게 한다.
+	public List<Order> findAll(OrderSearch orderSearch) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		 CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+		 Root<Order> o = cq.from(Order.class);
+		 Join<Order, Member> m = o.join("member", JoinType.INNER); //회원과 조인
+		 List<Predicate> criteria = new ArrayList<>();
+		    
+		 //주문 상태 검색
+		 if (orderSearch.getOrderStatus() != null) {
+		 	Predicate status = cb.equal(o.get("status"),
+			orderSearch.getOrderStatus());
+		 	criteria.add(status);
+		 }
+		    
+		 //회원 이름 검색
+		 if (StringUtils.hasText(orderSearch.getMemberName())) {
+		 	Predicate name =
+		 	cb.like(m.<String>get("name"), "%" +
+			orderSearch.getMemberName() + "%");
+		 	criteria.add(name); 
+		 }
+		 cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
+		 TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
+		 return query.getResultList();
+		}
+	}
+```
+
+* OrderServide
+
+```
+
+```
+
 
 
 

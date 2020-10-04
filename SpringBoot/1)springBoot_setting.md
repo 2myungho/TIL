@@ -233,17 +233,17 @@ java -jar jpashop-0.0.1-SNAPSHOT.jar //localhost로 접속 가능
 
 ## Spring Boot 어노테이션 및 용어
 
-| 어노테이션 & 용어        | 내용                                                         |
-| ------------------------ | ------------------------------------------------------------ |
-| Model                    | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
-| @Transactional           | @Test 에서 사용할 때 실행후 DB를 롤백 @Rollback(false)를 사용하면 비활성화 가능 |
-| @RequiredArgsConstructor | lombok의 어노테이션이다. final이 있는 필드에 생성자 inject를 자동으로 생성해준다. |
-|                          |                                                              |
-|                          |                                                              |
-|                          |                                                              |
-|                          |                                                              |
-|                          |                                                              |
-|                          |                                                              |
+| 어노테이션 & 용어                            | 내용                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| Model                                        | model에 데이터를 실어서 데이터를 Controller에서 View로 넘길 수 있다. |
+| @Transactional                               | @Test 에서 사용할 때 실행후 DB를 롤백 @Rollback(false)를 사용하면 비활성화 가능 |
+| @RequiredArgsConstructor                     | lombok의 어노테이션이다. final이 있는 필드에 생성자 inject를 자동으로 생성해준다. |
+| @NoArgsConstructor(access = AccessLevel.***) | 파라미터가 없는 기본 생성자를 자동 생성한다. ***에는 접근제한자가 들어간다. |
+|                                              |                                                              |
+|                                              |                                                              |
+|                                              |                                                              |
+|                                              |                                                              |
+|                                              |                                                              |
 
 
 
