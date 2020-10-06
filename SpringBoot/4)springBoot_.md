@@ -36,3 +36,17 @@
 
 * javax.validation 참고하기.
 
+
+
+### 공부중 생겻던 에러
+
+```JAVA
+unexpected token: member near line 1, column 15 [select m from member m]
+//모든 memberList를 불러오려고 했는데 이 에러가 났다 원인은 JPQL 이었다
+//MemberRepository에서 
+    return em.createQuery("select m from member m", Member.class)
+    //이걸
+    return em.createQuery("select m from Member m", Member.class) //Member로 고쳐주어야 한다.
+    //JPQL은 자바코드를 기본으로 따라갑니다.
+```
+
