@@ -117,7 +117,7 @@
 * EC2 서버에서 컨테이너 실행하기
 
   * ```
-    docker run -p {hostPort(80)}:{container port(80)} {docker image}:{tag}
+    docker run -d -p {hostPort(80)}:{container port(80)} {docker image}:{tag}
     ```
 
 
