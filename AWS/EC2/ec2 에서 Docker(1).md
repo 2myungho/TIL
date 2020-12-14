@@ -85,13 +85,13 @@
 * Docker image 생성
 
   * ```bash
-    docker build -t nginx-react:0.1 .
+    docker build -t dlaudghtn/planit-react:v1 .
     ```
 
 * 로컬에서 컨테이너 실행
 
   * ```bash
-    docker run -d --name my-react-app -p 8300:80 nginx-react:0.1
+    docker run -d --name my-react-app -p 8300:80 dlaudghtn/planit-react:v1
     
     docker ps로 컨테이너가 실행중인지 확인
     localhost:8300으로 접속
@@ -99,13 +99,8 @@
 
 * 도커 허브에 업로드
 
-  * 도커 허브에 로그인해서 레파지토리를 새로 만든다.
-
   * ```bash
-    docker tag nginx-react:0.1 {docker hub 아이디}/{레파지토리 이름}:{태그}
-    //우리가 생성한 이미지의 이름을 레파지토리에 업로드하기 위한 고유한 태그로 변경
-    
-    docker push dlaudghtn/planit-react:tagname
+    docker push dlaudghtn/planit-react:v1
     ```
 
 * EC2 서버에서 Docker image 다운 받기
