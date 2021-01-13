@@ -106,7 +106,7 @@
 * EC2 서버에서 Docker image 다운 받기
 
   * ```bash
-    docker pull {docker hub 아이디}/{레파지토리 이름}:{태그}
+    docker pull dlaudghtn/planit-react:v1
     ```
 
 * EC2 서버에서 컨테이너 실행하기

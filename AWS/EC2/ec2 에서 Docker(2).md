@@ -125,6 +125,7 @@ docker compose 설치
 Docker compose  실행
 
 * ```
+  docker-compose down --volume
   docker-compose up -d
   ```
 
