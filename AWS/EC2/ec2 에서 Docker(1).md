@@ -97,7 +97,7 @@
     }
     // location은 Proxy 서버로 들어오는 요청 URL에 따라 맵핑된다.
     // Proxy_pass는 들어온 요청을 어디로 포워딩 해두즌지 지정한다.
-    // 포워딩이란 : 
+    // ex) /api/auth를 통해 들어온 요청을 http://ec2-3-35-119-242.ap-northeast-2.compute.amazonaws.com:9000/api/auth 서버로 전환한다.
             
     //80 포트에 / 경로로 들어오면 /app/build 폴더에서 index.html 을 찾음.
     ```
