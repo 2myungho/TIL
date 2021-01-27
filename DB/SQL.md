@@ -128,3 +128,107 @@ ON e.emp_no = dept.emp_no
 ```
 
 ##### Where에서의 서브쿼리
+
+
+
+### 순위 매기기 함수
+
+##### RANK
+
+> **중복 값**들에 대해서 **동일 순위**로 표시합니다.
+>
+> 중복 순위 다음 값에 대해서는 **중복 개수만큼 떨어진 순위로 출력**하도록 하는 함수입니다.
+>
+> ```SQL
+> RANK() OVER (ORDER BY salary DESC) RANK등수
+> ```
+>
+> EX) 1, 2, 2, 2, 5, 6 ......
+
+##### DENSE_RANK
+
+> **중복 값**들에 대해서 **동일 순위**로 표시합니다.
+>
+> 중복 순위 다음 값에 대해서는 **중복 값 개수와 상관 없이 순차적인 순위 값을 출력**하도록 하는 함수입니다.
+>
+> ```SQL
+> DENSE_RANK() OVER (ORDER BY salary DESC) DENSE_RANK등수
+> ```
+>
+> EX) 1, 2, 2, 2, 3, 4, 5 ....
+
+##### ROW_NUMBER
+
+> **중복 값**들에 대해서도 **순차적인 순위를 표시**하도록 출력하는 함수입니다.
+>
+> ```SQL
+> ROW_NUMBER() OVER (ORDER BY salary DESC) ROW_NUMBER등수
+> ```
+>
+> EX) 1, 2, 3, 4, 5, 6 ..... 
+
+
+
+##### OVER절
+
+> ```SQL
+> OVER (PARTITION BY emp_no ORDER BY salary DESC)
+> ```
+>
+> **PARTITION**
+>
+> > **그룹 내 순위 및 그룹 별 집계**를 구할 때 유용하게 사용할 수 있습니다.
+> >
+> > EX) 중복 ID 내에서 순위를 매길 수 있다.
+
+##### 오름차순(ASC) 
+
+> 1 2 3 4 5 6
+
+##### 내림차순(DESC)
+
+> 6 5 4 3 2 1
+
+
+
+##### 예제 풀이
+
+```SQL
+-- HeidiSQL 프로그램을 사용하여 풀이
+SELECT e.emp_no, e.first_name, e.last_name, e.gender, e.hire_date, dept.dept_name ,t.title, s.salary AS max_salary
+from employees e
+
+-- 부서이름(dept_name) JOIN
+INNER JOIN (
+	SELECT c.emp_no, d.dept_name
+ 	FROM dept_emp c
+ 	INNER JOIN departments d
+ 	ON c.dept_no = d.dept_no
+ 	ORDER BY c.emp_no ASC
+) dept
+ON e.emp_no = dept.emp_no
+
+-- 직급(title) JOIN
+INNER JOIN titles t
+ON dept.emp_no = t.emp_no
+
+--최대 급여(max_salary) JOIN
+INNER JOIN (
+	SELECT *
+	FROM (
+		SELECT
+			emp_no
+			, salary
+			, ROW_NUMBER() OVER (PARTITION BY emp_no ORDER BY salary DESC) AS RankNo
+		FROM salaries
+	) rank
+    -- 같은 emp_no 중에 salary가 가장 큰 데이터 출력
+	WHERE RankNo = 1
+) s
+ON t.emp_no = s.emp_no
+
+--2000년 이후 고용된 종업원들을 대상으로 한다. (hire_date)
+WHERE e.hire_date >= '20000101';
+```
+
+> HeidiSQL 프로그램을 사용하여 풀이했습니다.
