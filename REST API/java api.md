@@ -4,6 +4,10 @@
 
 > 문자열 spec이 지정하는 자원에 대한 **URL 객체 생성**
 
+#### 램덤  api 정보
+
+> https://random-data-api.com/documentation
+
 
 
 ```java
