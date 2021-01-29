@@ -58,22 +58,18 @@ public class DBcon {
         ResultSet rs = stmt.executeQuery(sql);
         //메터 정보
         ResultSetMetaData metaInfo = rs.getMetaData();
-        
         //컬럼 갯수
         int count = metaInfo.getColumnCount();
-		
 		//행 갯수 저장
 		int row_count = 0;
 		while (rs.next()) {
 			row_count += 1;
 		}
-		
 		//커서의 위치를 첫번째 전으로 이동
 		rs.beforeFirst();
 		
         // 컬럼명
         String header[] = new String[count];
-
      	for (int i = 0; i < count; i++) {
      		header[i] = metaInfo.getColumnName(i + 1);
      		header[count - 1] = "max_salary";
@@ -82,7 +78,6 @@ public class DBcon {
      	//결과 값을 배열에 할당
      	int p = 0;
      	String[][] contents= new String [row_count][count];
-     	
      	while (rs.next()) {
 			// 레코드 출력
 			for (int i = 0; i < count; i++) {
