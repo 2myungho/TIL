@@ -1,3 +1,5 @@
+## TCP 통신 (소켓)
+
 ##### Stream
 
 > 바이트 단위의 입출력
@@ -39,6 +41,4 @@ Socket socket = null;
 출처 :
 
 >  https://m.blog.naver.com/PostView.nhn?blogId=pisibook&logNo=221582271090&proxyReferer=https:%2F%2Fwww.google.com%2F
-
-
 
