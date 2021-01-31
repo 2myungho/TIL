@@ -27,13 +27,13 @@ public class DBcon {
                     "12brique!@");
             
             if( con != null ) {
-                System.out.println("DB Á¢¼Ó ¼º°ø");
+                System.out.println("DB ì ‘ì† ì„±ê³µ");
             }
             
         } catch (ClassNotFoundException e) { 
-            System.out.println("µå¶óÀÌ¹ö ·Îµå ½ÇÆĞ");
+            System.out.println("ë“œë¼ì´ë²„ ë¡œë“œ ì‹¤íŒ¨");
         } catch (SQLException e) {
-            System.out.println("DB Á¢¼Ó ½ÇÆĞ");
+            System.out.println("DB ì ‘ì† ì‹¤íŒ¨");
             e.printStackTrace();
         }
     }
@@ -42,7 +42,7 @@ public class DBcon {
         DBcon dbcon = new DBcon();
         Statement stmt = dbcon.con.createStatement();
         StringBuilder sb = new StringBuilder();
-        //Äõ¸®¹®
+        //ì¿¼ë¦¬ë¬¸
         String sql = sb.append("SELECT e.emp_no, e.first_name, e.last_name, e.gender, e.hire_date, dept.dept_name ,t.title, s.salary AS max_salary \n")
         		.append("FROM employees e \n")
         		.append("INNER JOIN (SELECT c.emp_no, d.dept_name FROM dept_emp c INNER JOIN departments d ON c.dept_no = d.dept_no ORDER BY c.emp_no ASC) dept \n")
@@ -54,52 +54,52 @@ public class DBcon {
         		.append("WHERE e.hire_date >= '20000101' \n")
         		.append("ORDER BY e.hire_date ASC")
         		.append(";").toString();
-        //Äõ¸® Àû¿ë
+        //ì¿¼ë¦¬ ì ìš©
         ResultSet rs = stmt.executeQuery(sql);
-        //¸ŞÅÍ Á¤º¸
+        //ë©”í„° ì •ë³´
         ResultSetMetaData metaInfo = rs.getMetaData();
-        //ÄÃ·³ °¹¼ö
+        //ì»¬ëŸ¼ ê°¯ìˆ˜
         int count = metaInfo.getColumnCount();
-		//Çà °¹¼ö ÀúÀå
-		int row_count = 0;
-		while (rs.next()) {
-			row_count += 1;
-		}
-		//Ä¿¼­ÀÇ À§Ä¡¸¦ Ã¹¹øÂ° ÀüÀ¸·Î ÀÌµ¿
-		rs.beforeFirst();
+	//í–‰ ê°¯ìˆ˜ ì €ì¥
+	int row_count = 0;
+	while (rs.next()) {
+		row_count += 1;
+	}
+	//ì»¤ì„œì˜ ìœ„ì¹˜ë¥¼ ì²«ë²ˆì§¸ ì „ìœ¼ë¡œ ì´ë™
+	rs.beforeFirst();
 		
-        // ÄÃ·³¸í
+        // ì»¬ëŸ¼ëª…
         String header[] = new String[count];
      	for (int i = 0; i < count; i++) {
      		header[i] = metaInfo.getColumnName(i + 1);
      		header[count - 1] = "max_salary";
      	}
      	
-     	//°á°ú °ªÀ» ¹è¿­¿¡ ÇÒ´ç
+     	//ê²°ê³¼ ê°’ì„ ë°°ì—´ì— í• ë‹¹
      	int p = 0;
      	String[][] contents= new String [row_count][count];
      	while (rs.next()) {
-			// ·¹ÄÚµå Ãâ·Â
-			for (int i = 0; i < count; i++) {
-				contents[p][i] =  rs.getString(i + 1);
-			}
-			p += 1;
+		// ë ˆì½”ë“œ ì¶œë ¥
+		for (int i = 0; i < count; i++) {
+			contents[p][i] =  rs.getString(i + 1);
 		}
+		p += 1;
+	}
      	rs.close();
-		stmt.close();
+	stmt.close();
         
-		Dimension dim = new Dimension(800, 500);  //´Ü¼ø 2Â÷¿ø°ª ÀÔ·ÂÀ» À§ÇÑ Å¬·¡½º
+	Dimension dim = new Dimension(800, 500);  //ë‹¨ìˆœ 2ì°¨ì›ê°’ ì…ë ¥ì„ ìœ„í•œ í´ë˜ìŠ¤
 
         JFrame frame = new JFrame("wij complex");
-        frame.setLocation(0, 0);				  //Ãâ·Â À§Ä¡¸¦ È­¸é ÁÂ»ó´Ü¿¡ À§Ä¡
-        frame.setPreferredSize(dim);              //À§ ÄÚµå¿¡¼­ ÁöÁ¤ÇÑ ÁÂÇ¥¸¦ ÇÁ·¹ÀÓ »çÀÌÁî·Î »ç¿ë
-        frame.setLayout(null);                    //·¹ÀÌ¾Æ¿ôÀ» »ç¿ëÇÏÁö ¾Ê°í Àı´ëÁÂÇ¥°è »ç¿ë
+        frame.setLocation(0, 0);				  //ì¶œë ¥ ìœ„ì¹˜ë¥¼ í™”ë©´ ì¢Œìƒë‹¨ì— ìœ„ì¹˜
+        frame.setPreferredSize(dim);              //ìœ„ ì½”ë“œì—ì„œ ì§€ì •í•œ ì¢Œí‘œë¥¼ í”„ë ˆì„ ì‚¬ì´ì¦ˆë¡œ ì‚¬ìš©
+        frame.setLayout(null);                    //ë ˆì´ì•„ì›ƒì„ ì‚¬ìš©í•˜ì§€ ì•Šê³  ì ˆëŒ€ì¢Œí‘œê³„ ì‚¬ìš©
 		
         JTable table = new JTable(contents, header);
         //table.setLocation(0,0);
 
-        JScrollPane jscp1 = new JScrollPane(table); //ÀÌ·±½ÄÀ¸·Î »ı¼º½Ã¿¡ Å×ÀÌºíÀ» ³Ñ°ÜÁÖ¾î¾ß Á¤»óÀûÀ¸·Î º¼ ¼ö ÀÖ´Ù.
-                                                    //jscp1.add(table); °ú °°ÀÌ ½ÇÇàÇÏ¸é, Á¤»óÀûÀ¸·Î Ãâ·ÂµÇÁö ¾ÊÀ½.
+        JScrollPane jscp1 = new JScrollPane(table); //ì´ëŸ°ì‹ìœ¼ë¡œ ìƒì„±ì‹œì— í…Œì´ë¸”ì„ ë„˜ê²¨ì£¼ì–´ì•¼ ì •ìƒì ìœ¼ë¡œ ë³¼ ìˆ˜ ìˆë‹¤.
+                                                    //jscp1.add(table); ê³¼ ê°™ì´ ì‹¤í–‰í•˜ë©´, ì •ìƒì ìœ¼ë¡œ ì¶œë ¥ë˜ì§€ ì•ŠìŒ.
         jscp1.setLocation(0,0);
         jscp1.setSize(700,500);
 
@@ -107,6 +107,6 @@ public class DBcon {
 
         frame.pack();
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //´İ±â¹öÆ° Å¬¸¯½Ã ÇÁ·Î±×·¥ Á¾·á
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //ë‹«ê¸°ë²„íŠ¼ í´ë¦­ì‹œ í”„ë¡œê·¸ë¨ ì¢…ë£Œ
     }
 }
