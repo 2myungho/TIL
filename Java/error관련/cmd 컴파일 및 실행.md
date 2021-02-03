@@ -1,6 +1,6 @@
 #### cmd build 시 "cannot find symbol" 에러
 
-![image-20210129185924026](C:\Users\82108\AppData\Roaming\Typora\typora-user-images\image-20210129185924026.png)
+<img src="image\cmd error1.png" />
 
 > cmd에서 빌드할 때 이 에러가 발생한다면 **-sourcepath**명령어를 사용해서 (.class)파일 경로를 알려준다.
 
@@ -14,13 +14,13 @@
 > # src/BRIQUE_2/*java : 경로안 모든 .java 파일 컴파일
 > ```
 
-![cmd error2](C:\Users\82108\LMH\TIL\TIL\Java\image\cmd error2.PNG)
+<img src="image\cmd error2.png" />
 
 (out 디랙터리가  생긴 이미지)
 
 > 이렇게 하고나서 클래스 파일이 있는 out / BRIQUE_2 디렉토리에 가서 java Server 을 실행하면!
 
-![cmd error3](C:\Users\82108\LMH\TIL\TIL\Java\image\cmd error3.PNG)
+<img src="image\cmd error3.png" />
 
 > 기본 클래스를 찾거나 로드할 수 없다는 에러가 또 나옵니다..
 >
@@ -30,7 +30,7 @@
 >
 > **실행할 클래스 파일의 이름은 패키지명.클래스파일명으로 입력해야 합니다.**
 
-![cmd error4](C:\Users\82108\LMH\TIL\TIL\Java\image\cmd error4.PNG)
+<img src="image\cmd error4.png" />
 
 > 해결!!!
 >
