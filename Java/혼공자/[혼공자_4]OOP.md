@@ -161,3 +161,128 @@
 
 ### 메소드
 
+> 객체의 동작에 해당하는 중괄호 {} 블럭
+
+##### 매개 변수가 있는 메소드 호출
+
+> ```java
+> //메소드 선언
+> public class Calculator{
+>     //메소드
+>     void powerOn(){
+>         System.out.println("전원을 켭니다")
+>     }
+>     
+>     int plus(int x, int y){
+>         int result = x + y;
+>         return result;
+>     }
+> }
+> //메소드 호출
+> public class CalculatorExample{
+>     public static void main(String[] args){
+>     	Calculator myCalc = new Calculator();
+>         myCalc.powerOn(); 
+>         
+>         int result  = myCalc.plus(5, 6);
+>         System.out.println("result : " + result);
+>     }
+> }
+> //전원을 켭니다.
+> //11
+> ```
+
+##### 매개 변수의 개수를 모를 경우
+
+> 예를들어 여러 개의 수를 모두 합산하는 메소드를 선언해야할 때,
+>
+> 해결책을 다음과 같이 매개  변수를 **배열 타입으로 선언**합니다. `int sum1(int[] values){}`
+>
+> ```java
+> //메소드 선언
+> public class Computer{
+>     int sum1(int[] values){
+>         int sum = 0;
+>         for(int i = 0; i < values.length; i++){
+>             sum += values[i];
+>         }
+>         return sum;
+>     }
+> }
+> //메소드 호출
+> public class ComputerExample{
+>     public static void main(String[] args){
+>         Computer myCom = new Computer();
+>         
+>         int[] values = {1,2,3};
+>         int result = myCom.sum1(values1);
+>         System.out.println("result : " + result); //6
+>     }
+> }
+> ```
+
+##### 리턴값이 없는 메소드 : void
+
+> ```java
+> //메소드 선언
+> public class Car{
+>     //필드
+>     int gas;
+>     //메소드
+>     void setGas(int gas){
+>         this.gas = gas // 리턴값이 없는 메소드로 매개값을 받아서 gas 필드값을 변경
+>     }
+>     boolean isLeftGas(){
+>         if(gas == 0){
+>             System.out.println("가스가 없습니다.")
+>             return false; //false를 리턴
+>         }else{
+>             System.out.println("가스가 있습니다.")
+>             return true; //true를 리턴
+>         }
+>     }
+> }
+> 
+> //메소드 호출
+> public class CarExample{
+>     public static void main(String[] args){
+>         Car myCar = new Car();
+>         
+>         myCar.setGas(5); //Car클래스의 setGas() 메소드 호출
+>         
+>         if(myCar.isLeftGas()){ //Car클래스의 isLeftGas()메소드 호출
+>             System.out.println)("가스를 주입할 필요가 없습니다.")
+>         }else{
+>             System.out.println)("가스를 주입하세요.")
+>         }
+>     }
+> }
+> //가스가 있습니다.
+> //가스를 주입할 필요가 없습니다.
+> ```
+
+##### 클래스 내부/외부에서 메소드 호출 차이
+
+> 클래스 내부에서 메소드를 호출할 때는 new 연산자로 객체를 생성할 필요가 없습니다.
+>
+> ```java
+> public class ClassName{
+>     int method1(int x, int y){
+>         int result = x + y;
+>         return result;
+>     }
+>     void method2(){
+>         int result1 = method1(10,20) //result1에 30 저장
+>         int result2 = method1(10,20) //result2에 30.0 저장
+>     }
+> }
+> ```
+>
+> 클래스 외부에서 메소드를 호출할 때는  new 연산자로 객체를 생성해야합니다.
+>
+> ```java
+> //ex)
+> Car myCar = new Car();
+> myCar.setGas(5); //Car클래스의 setGas() 메소드 호출
+> ```
+
