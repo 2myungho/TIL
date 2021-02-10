@@ -251,9 +251,9 @@
 >         myCar.setGas(5); //Car클래스의 setGas() 메소드 호출
 >         
 >         if(myCar.isLeftGas()){ //Car클래스의 isLeftGas()메소드 호출
->             System.out.println)("가스를 주입할 필요가 없습니다.")
+>             System.out.println("가스를 주입할 필요가 없습니다.")
 >         }else{
->             System.out.println)("가스를 주입하세요.")
+>             System.out.println("가스를 주입하세요.")
 >         }
 >     }
 > }
@@ -284,5 +284,146 @@
 > //ex)
 > Car myCar = new Car();
 > myCar.setGas(5); //Car클래스의 setGas() 메소드 호출
+> ```
+
+##### 메소드 오버로딩
+
+> 생성자 오버로딩과 같이 매개 값을 다양하게 받아 처리할 수 있도록 하기 위함입니다.
+
+
+
+#### 정적 멤버와 static
+
+> **정적 멤버**는 **클래스에 고정된 멤버**로서 **객체를 생성하지 않고 사용할 수 있는 필드와 메소드**를 말합니다.
+>
+> 이를 정적 필드, 정적 메소드라고 합니다.
+>
+> 정적 맴버를 선언하려면 필드와 메소드 선언 시 **static 키워드**를 추가적으로 붙이면 됩니다.
+>
+> 클래스에 고정된 멤버이므로 **메소드 메모리 영역에** 적재할 때 **클래스별로 관리**됩니다.
+>
+> ```java
+> //메소드 선언
+> public class Calculator{
+>     int test;
+>     //정적 필드
+>     static double pi = 3.14159;
+>     
+>     //정적 메소드
+>     static int plus(int x, int y){
+>         //정적 메소드 내부에서는 인스턴스 필드나 인스턴스 메소드를 사용할 수 없습니다.
+>         //this.test (x)
+>         //this.pi (o)
+>         //인스턴스 멤버를 사용하고 싶다면 객체를 먼저 생성하고 참조 변수로 접근해야합니다.
+>         //Calculator myCal = new Calculator();
+>         //myCal.test (o)
+>         return x + y;
+>     }
+> }
+> //메소드 호출
+> public class CalculatorExample{
+>  public static void main(String[] args){
+>      double result1 = 10 * 10 * Calculator.pi //객체 생성 없이 Calculator 클래스의 pi 필드를 사용
+>      int result2 = Calculator.plus(10,5) //객체 생성 없이 Calculator 클래스의 plus 메서드를 사용
+>  }
+> }
+> ```
+
+> main() 메소드도 정적 메소드이기 때문에 인스턴스 멤버를 사용하기 위해서는 위와 같이 main 메소드 내부에 객체를 생성해서 사용해야 합니다.
+
+#### 싱글톤
+
+> 전체의 프로그램에서 **단 하나의 객체**만 만들도록 보장해야 하는 경우가 있습니다.
+>
+> 단 하나만 생성된다고 해서 이 객체를 **싱글톤**이라고 합니다.
+>
+> 싱글톤을 만드려면 외부에서 new 연산자로 생성자를 호출할 수 없게 막아야 합니다.
+>
+> > 외부에서 new 연산자를 사용하면 여러개의 객체를 생성할 수 있기 때문입니다.
+>
+>  그렇기 때문에 **생성자 앞**에 **private 접근 제한자**를 붙여주면 됩니다.
+>
+> ```java
+> public class Singleton{
+>     private static Singleton singleton = new Singleton(); //생성자 앞에 private를 붙임
+>     private Singleton(){}
+>     //new 연산자가 아닌 getInstance()를 통해서만 싱글톤 객체를 얻을 수 있습니다.
+>     static Singleton getInstance(){
+>         return singleton;
+>     }
+> }
+> 
+> public class SingletonExample{
+>     public static void main(String[] args){
+>         //Singleton obj1 = new Singleton(); 컴파일 에러가 난다. new 연산자로 생성할 수 없음
+>         
+>         //obj1과 obj2는 같은 객체를 참조합니다.
+>         Singleton obj1 = Singleton.getInstance();
+>         Singleton obj2 = Singleton.getInstance();
+>         
+>         if(obj1 == obj2){
+>             System.out.println("같은 싱글톤 객체입니다.")
+>         }
+>         
+>     }
+> }
+> ```
+
+#### final 필드
+
+> final 필드는 **초기값이 저장되면** 이것이 **최종적인 값**이 되어서 프로그램 실행 도중에 **수정할 수 없다는 뜻**입니다.
+>
+> ##### final 필드에 초기값 주는 방법
+>
+> 1. 필드 선언 시에 주는 방법
+>
+> 2. **생성자에서 주는 방법**
+>
+>    * ```java
+>      public class Person{
+>          final String nation = "Korea"; //필드 선언시 초기값
+>          final String ssn; //생성자에서 주는 방법
+>          
+>          public Person(String ssn){
+>              this.ssn = ssn;
+>          }
+>      }
+>      
+>      public class PersonExample{
+>          public static void main(String[] args){
+>              Person p1 = Person("123456-1234567");
+>              System.out.println(p1.nation) //Korea
+>              System.out.println(p1.ssn) //123456-1234567 final 필드 초기 값
+>          }
+>      }
+>      ```
+
+#### 상수
+
+> 일반적으로 불변의 값을 **상수(static final)**라고 합니다. 
+>
+> 예를들어 원주율 파이, 지구의 반지름 같이 불변의 값에 사용합니다.
+>
+> **상수(static final)와 final 필드의 차이점**
+>
+> > **상수의 값**은 **객체마다 저장할 필요가 없는 공용성**을 띄고 있으며, **여러 가지 값으로 초기화될 수 없기 때문**입니다.
+> >
+> > 객체마다 저장할 필요가 없는 공동성을 띈다 = 상수는 static이면서 final 이어야 한다.
+>
+> 상수의 **이름은 대문자**로 작성하는 것이 관례입니다.
+>
+> ```java
+> //상수 선언
+> public class Earth{
+>     static final double EARTH_RADIUS = 6400;
+>     static final double EARTH_AREA = 4 * Math.PI * EARTH_RADIUS * EARTH_RADIUS;
+> }
+> //상수 사용
+> public class EarthExample{
+>     public static void main(String[] args){
+>     	System.out.println("지구의 반지름 : " + Earth.EARTH_RADIUS + "km");
+>         System.out.println("지구의 표면적 : " + Earth.EARTH_AREA + "km^2");
+>     }
+> }
 > ```
 
