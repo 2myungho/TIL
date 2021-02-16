@@ -41,15 +41,15 @@
 
 #### merge
 
-* **master 브랜치 commit**
+* master 브랜치 commit
 
-<img src="image/master_branch.png" >
+<img src="image/master_branch.png" style="zoom:80%;"  >
 
-* **branch_1 생성 후 내용 추가 + commit**  
+* branch_1 생성 후 내용 추가 + commit  
 
-<img src="image/branch_1.png" >
+<img src="image/branch_1.png" style="zoom:80%;"  >
 
-* **master 브랜치로 이동해서 merge**
+* master 브랜치로 이동해서 merge
 
   > ```bash
   > git merge branch_1
@@ -57,14 +57,27 @@
   >
   > merge가 성공적으로 완료하면 branch_1의 내용과 master 브랜치의 내용이 병합된다.
   >
-  > master 브랜치를 push 하면 commit 로그에 branch_1이 성공적으로 기록된다.
-<<<<<<< HEAD
-=======
+  > master 브랜치에서 push 하면 **commit 로그에 branch_1이 성공적으로 기록**된다.
 
-#### merge 충돌 테스트
 
-> 
->>>>>>> branch_2
+
+#### merge 충돌
+
+* branch_1 브랜치 commit
+
+<img src="image/merge_3.png" style="zoom:80%;"  >
+
+* branch_2 브랜치 commit
+
+<img src="image/merge_4.png" style="zoom:80%;"  >
+
+* master 브랜치에서 branch_1 merge 성공 후 branch_2 를 merge하면 **충돌이 발생**한다.
+
+<img src="image/merge_2.png" >
+
+<img src="image/merge_1.png" style="zoom:80%;"  >
+
+> master 브랜치에 충돌난 부분을 처리하고 add / commit / push 하면 정상적으로 처리된다.
 
 
 
@@ -76,11 +89,11 @@
 >
 > rebase의 장점으로는 **커밋들의 흐름을 보기 좋게 한 줄로 만들 수 있다**는 장점이 있습니다.
 
+> 하지만 **master에서 rebase를 하는 건 좋지 않다.**
+>
+> rebase를 하게 되면 커밋도 새로 쓰고 정렬도 새로 하기 때문에 기존의 커밋트리가 완전히 달라진다.
 
-
-#### merge와 rebase의 차이
-
-> 
+> merge로도 충분히 괜찮은 성능을 보인다고 생각한다.
 
 
 
