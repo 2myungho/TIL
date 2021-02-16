@@ -89,23 +89,40 @@
 >
 > rebase의 장점으로는 **커밋들의 흐름을 보기 좋게 한 줄로 만들 수 있다**는 장점이 있습니다.
 
-> 하지만 **master에서 rebase를 하는 건 좋지 않다.**
+> master 브랜치가 아닌 생성한 test 브랜치로 이동해서 master 브랜치를 base 삼아 Rebase한다는 말입니다.
 >
-> rebase를 하게 되면 커밋도 새로 쓰고 정렬도 새로 하기 때문에 기존의 커밋트리가 완전히 달라진다.
+> ```bash
+> git checkout test
+> git rebase master
+> #또는
+> git rebase master test
+> ```
+>
+> 그러면 내부에서 master브랜치가 base가 되고, 변경 사항의 차이를 임시 저장하는 공간인 Patch에 저장합니다.
+>
+> 그리고 master 브랜치에 patch들이 적용됩니다.
+>
+> 마지막으로 Fast-forward 시키는 과정까지 완료하면 커밋 히스토리가 깔끔하게 정렬됩니다.
+>
+> 참고 문서
+>
+> > https://velog.io/@kwonh/Git-Rebase%EB%9E%80#rebase%EC%9D%98-%EC%9C%84%ED%97%98%EC%84%B1
 
-> merge로도 충분히 괜찮은 성능을 보인다고 생각한다.
 
 
+#### merge와 rebase
 
-checkout
+> merge와 rebase의 실행 결과는 같지만 커밋 히스토리가 달라진다.
+>
+> **merge**는 쉽고 안전하지만 커밋 히스토리가 지저분할 수 있다.
+>
+> **rebase**는 제대로 사용하지 못할 경우 위험할 수 있지만 **커밋 히스토리를 깔끔하게 관리**할 수 있다.
 
-cherry-pick
+왼쪽이 rebase 오른쪽이 merge이다.
 
-reset
+<img src="image/merge_rebase.png" >
 
-revert
 
-> 
 
 
 
