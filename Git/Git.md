@@ -41,15 +41,15 @@
 
 #### merge
 
-* **master 브랜치 내용**
+* **master 브랜치 commit**
 
 <img src="image/master_branch.png" >
 
-* **branch_1 생성 후 내용 추가**
+* **branch_1 생성 후 내용 추가 + commit**  
 
 <img src="image/branch_1.png" >
 
-* master 브랜치로 이동해서 merge
+* **master 브랜치로 이동해서 merge**
 
   > ```bash
   > git merge branch_1
@@ -57,7 +57,7 @@
   >
   > merge가 성공적으로 완료하면 branch_1의 내용과 master 브랜치의 내용이 병합된다.
   >
-  > push를 통한 merge는 git에서 pull request를 사용한다.
+  > master 브랜치를 push 하면 commit 로그에 branch_1이 성공적으로 기록된다.
 
 
 
