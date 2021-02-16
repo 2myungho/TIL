@@ -58,6 +58,13 @@
   > merge가 성공적으로 완료하면 branch_1의 내용과 master 브랜치의 내용이 병합된다.
   >
   > master 브랜치를 push 하면 commit 로그에 branch_1이 성공적으로 기록된다.
+<<<<<<< HEAD
+=======
+
+#### merge 충돌 테스트
+
+> 
+>>>>>>> branch_2
 
 
 
