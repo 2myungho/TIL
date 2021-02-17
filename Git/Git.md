@@ -95,7 +95,7 @@
 > git checkout test
 > git rebase master
 > #또는
-> git rebase master test
+> git rebase master test #test(ex v2)가 master(ex v1)라인으로 복사 (ex v2')
 > ```
 >
 > 그러면 내부에서 master브랜치가 base가 되고, 변경 사항의 차이를 임시 저장하는 공간인 Patch에 저장합니다.
