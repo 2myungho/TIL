@@ -192,10 +192,10 @@ function returnStringOrNull(): string | number(){
 >
 > ```typescript
 > function merge<T1, T2>(a: T1, b: T2){
->     return {
->         ...a,
->         ...b
->     }
+>  return {
+>      ...a,
+>      ...b
+>  }
 > }
 > 
 > const merged = merge({foo: 1}, {bar: 2});
@@ -204,7 +204,7 @@ function returnStringOrNull(): string | number(){
 >
 > any와 같이 모든 값을 넣을 수 있지만 any를 사용하면 에디터에서 `(property)param: any`로 표시되지만
 >
-> Generics을 사용하면 `(property) prram: String` 등으로 표시된다.
+> Generics을 사용하면 `(property) param: String` 등으로 표시된다.
 >
 > ##### 인터페이스에서 사용
 >
@@ -215,11 +215,34 @@ function returnStringOrNull(): string | number(){
 > }
 > const items: Items<number, string> = {
 > 	list: [1,2,3],
->     value: 'aaaa',
+>  value: 'aaaa',
 > }
 > ```
 >
+> #### 리액트에서 사용할 때
+>
+> ```react
+> //type
+> type SearchState<T> = {
+>     keyword: T;
+>     autoCompletes: AutoComplete[]
+> }
 > 
+> //state
+> const INITIAL_STATE: SearchState<string> = {
+>     keyword: '',
+>     autoCompletes: [],
+> };
+> 
+> //reducer
+> function searchReducer(state: SearchState<string> = INITIAL_STATE, action: SearchAction): SearchState<string> {
+>     
+> }
+> ```
+>
+> 제네릭을 사용하면 위와 같이 인터페이스를 사용할 때 타입을 따로 지정해 줄 수 있다.
+>
+> searchState를 사용할 때 제네릭 부분에 원하는 타입을 넣어서 객체마다 다른 타입으로 사용할 수 있다. 
 
 
 
