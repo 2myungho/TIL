@@ -12,7 +12,7 @@
 >
 > 풍부한 생태계를 갖추고 있다.
 >
-> React Navive까지 배우면 모바일 앱도 개발 가능
+> React Native까지 배우면 모바일 앱도 개발 가능
 
 > **Virtual DOM**
 >
@@ -74,7 +74,7 @@
 >     )
 >     ```
 >
->   * React.createElement()의 결과로 아래와 같은 객첵 생성됨
+>   * React.createElement()의 결과로 아래와 같은 객체 생성됨
 >
 >     ```react
 >     const element = {
@@ -168,12 +168,12 @@ const element = <Welcom name ="Sara"/>
 >
 > state는 직접 수정하면 안된다.
 >
-> * 리액트엑서 관리한다.
+> * 리액트에서 관리한다.
 > * setState() 함수를 사용한다.
 
 
 
-#### LifrCycle 생명주기
+#### LifeCycle 생명주기
 
 > https://github.com/2myungho/TIL/blob/master/react/LifeCycle.md
 >
@@ -185,7 +185,7 @@ const element = <Welcom name ="Sara"/>
 > Updating 인생
 >
 > * state 가 변경 되었을 때
-> * componentDidUpdater
+> * componentDidUpdate
 >
 > Unmounting 사망
 >

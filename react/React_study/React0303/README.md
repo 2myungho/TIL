@@ -134,7 +134,7 @@
 > //return 문에 입력되는 구문은 컴포넌트가 언마운트 되기 전에 호출
 > //두번째 매개변수 [userId]입력 하게되면 userId 변경시에만 useEffect 함수 실행
 > //두번째 매개변수에 빈 배열을 입력하면 렌더린된 직후에 useEffect 한 번만 실행 (return문 작성시 언마운트 되기 직전에 한 번 실행)
-> //두번째 매개변수에 아무 값도 주지 않으면 state가 변경될때마다 컴포넌트가 렌더링이 되고 useEffect 함수가 계속 실행하게 된다.
+> //두번째 매개변수에 아무 값도 주지 않으면 state가 변경될때마다 useEffect 함수가 실행된다.
 > useEffect(() => {
 >     getUserApi(userId).then(data => setUser(data));
 >     return () => {

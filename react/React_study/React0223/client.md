@@ -9,17 +9,17 @@
 > * 성능 : 배치 처리로 DOM 변경
 >
 > * **DOM (Document Object Model)  문서 객체 모델** : 
->
->   * 내가 작성한 HTML 코드가 DOM (X)
+>* 내가 작성한 HTML 코드가 DOM (X)
 >   * **DevTools (개발자 도구)** 에서 보이는 코드가 DOM (O)
+> 
 >
 >   
->
-> **virtual DOM**
->
-> * 실제 DOM의 구조와 비슷한, React 객체의 트리이다.
+>**virtual DOM**
+> 
+>* 실제 DOM의 구조와 비슷한, React 객체의 트리이다.
 > * 개발자는 직접 DOM을 제어하지 않고 Virtual DOM을 제어하고, 
 > * React에서 적절하게 Virtual DOM을 DOM에 반영하는 작업을 한다.
+> * 스크린에 그려지는 것이 없기 때문에 Real DOM만 사용한 것보다 더 빠르다.
 
 
 
@@ -28,15 +28,13 @@
 > **Real DOM**
 >
 > * 만약 10개의 리스트가 있다.
-> * 그중에 한가지의 리스트만 UPDATE 했을 때 **전체 리스트를 Reload** 해야한다.
+> * 10개의 리스트 중 1번 리스트를 변경했을 때 **전체 리스트가 Reload** 된다.
 >
 > **Virtual DOM**
 >
 > * 만약 10개의 리스트가 있다.
-> * 그 중에 한가지의 리스트만 UPDATE 했을 때 **바뀐 항목만 Reload**할 수 있다.
-
-> * 10개의 리스트에 대한 스냅샷을 찍어두고
-> * Virtual DOM이 바뀐 부분을 찾아내고 바뀐 부분만 Real DOM에서 바꿔준다.
+> * Virtual DOM이 업데이트 되기 직전의 Virtual DOM 스냅샷과 비교하고 어떤 리스트들이 변했는지 파악한다.
+> * 변화가 있는 리스트들만 실제 DOM에서 업데이트 된다.
 
 
 

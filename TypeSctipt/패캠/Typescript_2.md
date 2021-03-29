@@ -1,7 +1,7 @@
 #### 리액트 프로젝트 만들기
 
 ```bash
-npx create-react-app [프로젝트 이름] --typescript
+npx create-react-app [프로젝트 이름] --template --typescript
 ```
 
 #### 기존 프로젝트에 타입스크립트 도입
@@ -26,7 +26,7 @@ npx create-react-app [프로젝트 이름] --typescript
 
 #### React.FC
 
-> 최신 버전 CRA 에서는 컴포넌트에 생성성시 붙지 않는다.
+> 최신 버전 CRA 에서는 컴포넌트 단축키 생성시 붙지 않는다.
 >
 > ##### 장점
 >
@@ -107,7 +107,7 @@ npx create-react-app [프로젝트 이름] --typescript
 > ```react
 > type Action = 
 >     | {type: 'INCREASE'} 
-> 	| {type: 'DECREASE'};
+>  | {type: 'DECREASE'};
 > 
 > function reducer(state: number, action: Action): number{
 > 	switch (action.type){
@@ -122,7 +122,7 @@ npx create-react-app [프로젝트 이름] --typescript
 
 > 함수에서 반환하는 **타입**을 가져올 수 있다.
 >
-> 여기서 타입은 타입스크립트의 타입을 의미합니다
+> 여기서 타입은 타입스크립트의 타입을 의미한다.
 >
 > ```react
 > const INCREASE = 'counter/INCREASE' as const;
@@ -145,7 +145,7 @@ npx create-react-app [프로젝트 이름] --typescript
 > //리듀서 액션의 대한 타입 기본형
 > type CounterAction = 
 >     | {type: 'counter/INCREASE'}
-> 	| ...
+>  | ...
 > ```
 >
 > 1. 액션에 `as const`가 되어 있어야 한다.
