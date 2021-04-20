@@ -123,4 +123,29 @@ remote tracking branch (origin/master) 리모트 브랜치
 > git pull origin main:test # 원격 브랜치 main에 foo 브랜치 생성
 > ```
 >
-> 
+
+
+
+
+
+#### 깃 명령어
+
+````bash
+ vim ~/.gitconfig
+
+[alias]
+    co = checkout
+    rb = rebase -i
+    st = status
+    cm = commit
+    pl = pull
+    ps = push
+    lg = log --graph --abbrev-commit --decorate --format=format:'%C(cyan)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(yellow)%d%C(reset)' --all
+    ad = add
+    tg = tag -n
+    df = diff
+    br = branch
+````
+
+
+
