@@ -250,6 +250,10 @@ function returnStringOrNull(): string | number(){
 
 
 
+자바스크립트에 사용할 때 참고
+
+https://basarat.gitbook.io/typescript/intro-1/jest
+
 
 
 타입스크립트를 사용하면 에디터에서 변수의 타입을 알려주는 등의 지원이 좋았다.
