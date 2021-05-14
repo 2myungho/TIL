@@ -1,7 +1,7 @@
 #### 리액트 프로젝트 만들기
 
 ```bash
-npx create-react-app [프로젝트 이름] --template --typescript
+npx create-react-app [프로젝트 이름] --template typescript
 ```
 
 #### 기존 프로젝트에 타입스크립트 도입
