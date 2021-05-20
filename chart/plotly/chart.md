@@ -190,3 +190,23 @@ export default function BasicBar() {
           }}
     ```
 
+
+
+### plot.js 심화
+
+#### Axes (축)
+
+* xaxis, yaxis
+
+* 축의 눈금 너비 사이즈 등을 조절할 수 있음
+
+  * ```javascript
+    autotick: false //사이즈가 늘어나도 눈금이 고정됨
+    ```
+
+* 차트의 테두리 밑 grid의 디자인을 변경할 수 있음
+
+* 축을 반전 시킬 수 있음
+
+
+
