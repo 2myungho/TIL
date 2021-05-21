@@ -192,7 +192,145 @@ export default function BasicBar() {
 
 
 
-### plot.js 심화
+### Plot.js 디자인 변경
+
+#### marker 변경
+
+##### marker 디자인
+
+* line을 사용해서 marker의 테두리도 변경 가능
+
+```react
+marker: {
+	size: 12,
+	opacity: 0.5,
+	color: ["red", "blue", "red"],
+    line: {
+     	color: 'rgb(231, 99, 250)',
+     	width: 6
+    }
+}
+```
+
+#### maker 모양 변경
+
+```react
+marker: {symbol: ["diamond-open"........]}
+```
+
+
+
+
+
+#### 데이터에 hover 텍스트 추가
+
+![text1](https://user-images.githubusercontent.com/52882578/119091614-5025d380-ba48-11eb-87a3-952f4f7707aa.PNG)
+
+`text`: 데이터의 본문 설정
+
+`hovertemplate`
+
+> 마우스 오버 상자에 나타나는 정보를 렌더링 하는데 사용되는 템플릿 문자열.
+
+`hoverlabel`
+
+> ex) `hoverlabel:{bgcolor: #fff}`
+>
+> bgcolor : 호버 레이블의 백그라운드 컬러
+>
+> bordercolor : 호버 레이블의 테두리 컬러
+>
+> font : 호버 레이블의 폰트
+>
+> align : `left | "right | auto"` 호버 레이블 텍스트 내용을 수평 정렬
+
+`hoverinfo`
+
+> "x", "y", "x + y" 등 표시하고 싶은 텍스트만 선택 가능 기본 값은 "all" 
+
+
+
+#### 범례
+
+##### 숨기기
+
+```react
+layout:{{showlegend: false}
+```
+
+##### 이름 변경
+
+```react
+data={[
+	...
+	name: "testChart"
+]}
+```
+
+##### 차트 내부에 범례 배치
+
+```
+layout:{{legend:{
+	x:1,
+	y:1
+}}}
+```
+
+> 위에 x, y는 0.1 ~ 1까지 범례가
+> **x는 좌에서 우로**, 
+> **y는 아래에서 위로** 이동한다.
+> 예를 들어 `x : 1`, `y : 1` 일 경우 우측 최상단에 범례가 위치한다.
+
+##### 범례 스타일링 
+
+```react
+layout:{{legend:{
+    font: {
+      family: 'sans-serif',
+      size: 12,
+      color: '#000'
+    },
+    bgcolor: '#E2E2E2',
+    bordercolor: '#FFFFFF',
+    borderwidth: 2
+}}}
+```
+
+##### 범례 방향 변경
+
+```react
+layout:{{legend:{"orientation": "h"}}}
+```
+
+> 위의 같이 작성하면 오른쪽에 있던 범례가 아래로 내려간다.
+>
+> 기본 값으로는 `v`이다 (우측 방향)
+
+##### 범례 그룹화
+
+> `legendgroup: 'group1'`
+>
+> 그룹화할 데이터에 같은 속성으로 입력하면 범례가 그룹화 되어 표시 된다.
+
+
+
+#### 그래프 높이 및 여백 조정
+
+![여백](https://user-images.githubusercontent.com/52882578/119103062-b1a06f00-ba55-11eb-82fe-cf169715a290.PNG)
+
+```react
+layout={{
+   margin: {
+    l: 50, //왼쪽 패딩
+    r: 50, //오른쪽 패딩
+    b: 100, //하단 패딩
+    t: 100, //상단 패딩
+  },     
+}} 
+
+```
+
+
 
 #### Axes (축)
 
@@ -207,6 +345,38 @@ export default function BasicBar() {
 * 차트의 테두리 밑 grid의 디자인을 변경할 수 있음
 
 * 축을 반전 시킬 수 있음
+
+* 축의 폰트 바꾸기
+
+  * ```react
+    xaxis: {
+        ....
+        font: {
+            family: 'Courier New, monospace',
+            size: 18,
+            color: '#7f7f7f'
+        }
+     }
+    ```
+
+
+
+#### 차트 드래그 변경
+
+( `"zoom"` | `"pan"` | `"select"` | `"lasso"` | `"drawclosedpath"` | `"drawopenpath"` | `"drawline"` | `"drawrect"` | `"drawcircle"` | `"orbit"` | `"turntable"` | `false` )
+
+ex) 
+
+```react
+dragmode: "zoom" //영역 확대 default
+dragmode: "pan" //드래그로 차트 이동
+dragmode: "select" //드래그로 영역 선택
+dragmode: "lasso" //올가미
+```
+
+
+
+#### 애니메이션 효과
 
 
 
