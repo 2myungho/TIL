@@ -136,3 +136,176 @@ Container와 image 생성 됨, compose 파일에 DB설정을 해두면 DB도 생
 
 
 보안그룹, react 프록시 수정
+
+
+
+```react
+import React, { useEffect, useState } from 'react';
+import Plot from 'react-plotly.js';
+import { Data, PlotDatum, PlotMouseEvent } from 'plotly.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setImpLabel, setValuesIndex } from 'common/dataSlice';
+import { RootState } from 'common/store';
+import style from './ImpView.module.css';
+
+interface ImportantData {
+  impArr: { key: string; value: number }[];
+  allDataCh: boolean;
+}
+
+export default function ImpChart({
+  impArr,
+  allDataCh
+}: ImportantData): JSX.Element {
+  const dispatch = useDispatch();
+  const valuesIndex = useSelector((state: RootState) => state.data.valuesIndex);
+  const [lackValue, setLackValue] = useState(0);
+  const [remainingValues, setRemainingValues] = useState(0);
+
+  const labels = impArr.map(data => data.key);
+  const values = impArr.map(data => data.value);
+
+  useEffect(() => {
+    setLackValue(
+      1 -
+        values.reduce(function add(sum, currValue) {
+          return sum + currValue;
+        }, 0)
+    );
+
+    let viewValues = 0;
+    for (let i = 0; i < values.length; i += 1) {
+      if (viewValues > 70) {
+        dispatch(setValuesIndex(i));
+        break;
+      }
+      viewValues += values[i] * 100;
+    }
+
+    let remainingSum = 0;
+    for (let i = valuesIndex; i < values.length; i += 1) {
+      remainingSum += values[i] * 100;
+    }
+    setRemainingValues(remainingSum);
+  }, [dispatch, values, valuesIndex]);
+
+  const data = {
+    type: 'pie',
+    values: values
+      .slice(0, valuesIndex)
+      .concat(remainingValues / 100 + lackValue),
+    labels: labels.slice(0, valuesIndex).concat('etc'),
+    showlegend: false
+  };
+  const allData = {
+    type: 'pie',
+    values: values.concat(lackValue),
+    labels: labels.concat('lack'),
+    showlegend: false
+  };
+
+  const layout = {
+    legend: {
+      orientation: 'h'
+    },
+    margin: {
+      l: 20,
+      r: 20,
+      b: 20,
+      t: 20
+    }
+  } as Partial<Plotly.Layout>;
+
+  interface PieDatum extends PlotDatum {
+    label: string;
+  }
+  interface PieEvent extends PlotMouseEvent {
+    points: PieDatum[];
+  }
+  const onGetImpLabel = (e: PieEvent) => {
+    dispatch(setImpLabel(e.points[0].label));
+  };
+
+  return (
+    <>
+      {!allDataCh && (
+        <Plot
+          data={[data] as Data[]}
+          layout={layout}
+          config={{ displayModeBar: false, responsive: false }}
+          className={style.impChart}
+          onClick={onGetImpLabel as (event: Readonly<PlotMouseEvent>) => void}
+        />
+      )}
+      {allDataCh && (
+        <Plot
+          data={[allData] as Data[]}
+          layout={layout}
+          config={{ displayModeBar: false, responsive: false }}
+          className={style.impChart}
+          onClick={onGetImpLabel as (event: Readonly<PlotMouseEvent>) => void}
+        />
+      )}
+    </>
+  );
+}
+
+```
+
+
+
+```react
+import React, { useState } from 'react';
+import { Button, Col, Row } from 'antd';
+import { useSelector } from 'react-redux';
+import { RootState } from 'common/store';
+import ImpTable from './ImpTable';
+import ImpChart from './ImpChart';
+import style from './ImpView.module.css';
+
+export default function ImpView(): JSX.Element {
+  const data = useSelector((state: RootState) => state.data.data);
+  const selectedWaperIds = useSelector(
+    (state: RootState) => state.qualityPredict.selectedWaperIds
+  );
+  const impData = data.find(d => d.wafer_id === '12J9183.01')
+    ?.important_features as { [key: string]: number };
+
+  const impArr: { key: string; value: number }[] = [];
+
+  for (let i = 0; i < Object.keys(impData).length; i += 1) {
+    impArr[i] = {
+      key: Object.keys(impData)[i],
+      value: Object.values(impData)[i]
+    };
+  }
+
+  impArr.sort((a, b) => {
+    return b.value - a.value;
+  });
+
+  const [allDataCh, setAllDataCh] = useState(false);
+  const onAllData = () => {
+    setAllDataCh(!allDataCh);
+  };
+
+  return (
+    <Row className={style.impRow}>
+      <Col span={8} className={`${style.colWap} ${style.colChart}`}>
+        <div className={style.impHeader}>
+          <p>{selectedWaperIds[1]}</p>
+          <Button className={style.headerText} onClick={onAllData}>
+            All Data
+          </Button>
+        </div>
+        <ImpChart impArr={impArr} allDataCh={allDataCh} />
+      </Col>
+      <Col span={16} className={style.colWap}>
+        <ImpTable impArr={impArr} />
+      </Col>
+    </Row>
+  );
+}
+
+```
+

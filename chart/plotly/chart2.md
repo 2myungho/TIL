@@ -100,3 +100,152 @@ export default function ChartX1(): JSX.Element {
 
 ```
 
+```react
+import React, { useEffect } from 'react';
+import { Col, Row } from 'antd';
+import { Data } from 'plotly.js';
+import Plot from 'react-plotly.js';
+import ImpTableSample from './ImpTableSample';
+import style from './impSample.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'common/store';
+import { getImportant } from 'common/dataSlice';
+
+export default function ImpViewSample(): JSX.Element {
+  const impData = useSelector((state: RootState) => state.data.impData);
+  const dispatch = useDispatch();
+
+  const impArr: { key: string; value: number }[] = [];
+
+  for (let i = 0; i < Object.keys(impData).length; i += 1) {
+    impArr[i] = {
+      key: Object.keys(impData)[i],
+      value: Object.values(impData)[i]
+    };
+  }
+
+  impArr.sort(function (a, b) {
+    return b.value - a.value;
+  });
+
+  const labels = impArr.map(data => data.key);
+  const values = impArr.map(data => data.value);
+
+  const data = {
+    type: 'pie',
+    values: values.slice(0, 5),
+    labels: labels.slice(0, 5)
+  };
+
+  const layout = {
+    legend: {
+      orientation: 'h'
+    },
+    margin: {
+      l: 30,
+      r: 30,
+      b: 30,
+      t: 30
+    }
+  } as Partial<Plotly.Layout>;
+
+  useEffect(() => {
+    dispatch(getImportant(waferId));
+  }, [dispatch, waferId]);
+  
+  return (
+    <Row className={style.impRow}>
+      <Col span={8} className={`${style.colWap} ${style.colChart}`}>
+        <div className={style.impHeader}>Wafer_id</div>
+        <Plot
+          data={[data] as Data[]}
+          layout={layout}
+          config={{ displayModeBar: false, responsive: false }}
+          className={style.impChart}
+        />
+      </Col>
+      <Col span={16} className={style.colWap}>
+        <ImpTableSample impArr={impArr} />
+      </Col>
+    </Row>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+export interface Data {
+  wafer_id: string;
+  output_dtts: number;
+  product_id: string;
+  output_name: string;
+  y: number;
+  yhat: number;
+  important_features: { [key: string]: number };
+}
+export interface DataState {
+  data: Data[];
+  impData: { [key: string]: number };
+}
+
+const initialState: DataState = {
+  data: [
+    {
+      wafer_id: '0',
+      output_dtts: 1,
+      product_id: 'H',
+      output_name: 'T',
+      y: 2,
+      yhat: 0,
+      important_features: {}
+    }
+  ],
+  impData: {}
+};
+
+export const getAllData = createAsyncThunk('data/getAllData', async () => {
+  const response = await axios.get('http://localhost:3010/qps/v1/data');
+  return response.data;
+});
+
+export const getImportant = createAsyncThunk(
+  'data/getImportant',
+  async (wafer_id: any) => {
+    const response = await axios.get(
+      `http://localhost:3010/qps/v1/data/imp/?id=${wafer_id}`
+    );
+    return response.data;
+  }
+);
+
+const data = createSlice({
+  name: 'data',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getAllData.fulfilled, (state, { payload }) => {
+      state.data = payload;
+    });
+    builder.addCase(getImportant.fulfilled, (state, { payload }) => {
+      state.impData = payload;
+    });
+  }
+});
+export default data.reducer;
+
+```
+
